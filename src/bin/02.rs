@@ -1,5 +1,7 @@
 advent_of_code::solution!(2);
 
+pub mod util;
+use util::str_to_u32_or_panic;
 use std::cmp::max;
 
 pub fn part_one(input: &str) -> Option<u32> {
@@ -61,10 +63,6 @@ pub fn part_two(input: &str) -> Option<u32> {
         r * g * b
     }).sum();
     Some(sum)
-}
-
-fn str_to_u32_or_panic (str: &str) -> u32 {
-    str.parse::<u32>().unwrap_or_else(|x| panic!("{}", x))
 }
 
 #[cfg(test)]
