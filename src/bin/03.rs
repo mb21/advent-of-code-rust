@@ -52,6 +52,49 @@ pub fn part_one(input: &str) -> Option<u32> {
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
+    let mut numbers = Vec::<String>::new();
+    let vec: Vec<Vec<Option<&String>>> = input.lines().map(|line| {
+        let mut parsing_nr = false;
+        line.chars().map(|char| {
+            if char.is_digit(10) {
+                if parsing_nr {
+                    numbers.last_mut().expect("last element should be there")
+                      .push_str(&char.to_string());
+                    numbers.last()
+                } else {
+                    let s = char.to_string();
+                    numbers.push(s);
+                    parsing_nr = true;
+                    Some(&s)
+                }
+            } else {
+                parsing_nr = false;
+                None
+            }
+        }).collect()
+    }).collect();
+
+
+    let gear_ratio = |line: usize, start: usize, end: usize| -> u32 {
+        let mut nr_of_adjacent_numbers = 0;
+        let mut product = 1;
+        for i in line.saturating_sub(1)..min(line+2, vec.len() - 1) {
+            for j in start.saturating_sub(1)..min(end+1, vec[i].len() - 1) {
+                if i != line || (j == start.saturating_sub(1) || j == end) {
+                    if let Some(s) = vec[i][j] {
+                        nr_of_adjacent_numbers += 1;
+                        product *= str_to_u32_or_panic(s);
+                    }
+                }
+            }
+        }
+        if nr_of_adjacent_numbers == 2 {
+            product
+        } else {
+            0
+        }
+    };
+
     None
 }
 
